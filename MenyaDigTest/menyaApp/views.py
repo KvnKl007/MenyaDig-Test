@@ -7,14 +7,6 @@ from django.contrib.auth import authenticate, login, logout
 from .models import Room, Topic, Message, User
 from .forms import RoomForm, UserForm, MyUserCreationForm
 
-# Create your views here.
-
-# rooms = [
-#     {'id': 1, 'name': 'Lets learn python!'},
-#     {'id': 2, 'name': 'Design with me'},
-#     {'id': 3, 'name': 'Frontend developers'},
-# ]
-
 
 def loginPage(request):
     page = "login"
@@ -69,7 +61,7 @@ def home(request):
 
     rooms = Room.objects.filter(
         Q(topic__name__icontains=q) | Q(name__icontains=q) | Q(description__icontains=q)
-    )
+    ).select_related("host")
 
     topics = Topic.objects.all()[0:5]
     room_count = rooms.count()
