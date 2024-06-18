@@ -1,8 +1,12 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, Group, Permission
 
 
 class User(AbstractUser):
+    groups = models.ManyToManyField(Group, related_name="menyaApp_user_set", blank=True)
+    user_permissions = models.ManyToManyField(
+        Permission, related_name="menyaApp_user_permissions", blank=True
+    )
     name = models.CharField(max_length=200, null=True)
     email = models.EmailField(unique=True, null=True)
     bio = models.TextField(null=True)
