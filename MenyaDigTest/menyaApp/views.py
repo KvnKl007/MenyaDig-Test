@@ -1,11 +1,12 @@
-from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponse, JsonResponse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseForbidden
 from django.db.models import Q
 from django.contrib.auth import authenticate, login, logout
-from .models import Room, Topic, Message, User
-from .forms import RoomForm, UserForm, MyUserCreationForm
+from .models import Room, Topic, Message, User, VideoPost
+from .forms import RoomForm, UserForm, MyUserCreationForm, VideoPostForm
 
 
 def loginPage(request):
@@ -76,6 +77,7 @@ def home(request):
     return render(request, "base/home.html", context)
 
 
+@login_required(login_url="login")
 def room(request, pk):
     room = Room.objects.get(id=pk)
     room_messages = room.message_set.all()
@@ -200,3 +202,83 @@ def topicsPage(request):
 def activityPage(request):
     room_messages = Message.objects.all()
     return render(request, "base/activity.html", {"room_messages": room_messages})
+
+
+# List view
+def video_post_list(request):
+    video_posts = VideoPost.objects.all()
+    post_count = video_posts.count()
+    topics = Topic.objects.all()[0:5]
+
+    context = {
+        "video_posts": video_posts,
+        "topics": topics,
+        "post_count": post_count,
+    }
+    return render(request, "base/video_post_list.html", context)
+
+
+# Detail view
+def video_post_detail(request, pk):
+    video_post = get_object_or_404(VideoPost, pk=pk)
+    return render(request, "base/video_post_detail.html", {"video_post": video_post})
+
+
+# Create view
+@login_required(login_url="login")
+def video_post_create(request):
+    if request.method == "POST":
+        form = VideoPostForm(request.POST, request.FILES)
+        if form.is_valid():
+            video_post = form.save(commit=False)
+            video_post.creator = request.user
+            video_post.save()
+            return redirect("video_post_list")
+    else:
+        form = VideoPostForm()
+    return render(request, "base/video_post_form.html", {"form": form})
+
+
+# Update view
+@login_required(login_url="login")
+def video_post_update(request, pk):
+    video_post = get_object_or_404(VideoPost, pk=pk)
+    if request.user != video_post.creator:
+        return HttpResponseForbidden("You are not allowed to edit this post.")
+
+    if request.method == "POST":
+        form = VideoPostForm(request.POST, request.FILES, instance=video_post)
+        if form.is_valid():
+            form.save()
+            return redirect("video_post_detail", pk=video_post.pk)
+    else:
+        form = VideoPostForm(instance=video_post)
+    return render(request, "base/video_post_form.html", {"form": form})
+
+
+# Delete view
+@login_required(login_url="login")
+def video_post_delete(request, pk):
+    video_post = get_object_or_404(VideoPost, pk=pk)
+    if request.user != video_post.creator:
+        return HttpResponseForbidden("You are not allowed to delete this post.")
+
+    if request.method == "POST":
+        video_post.delete()
+        return redirect("video_post_list")
+    return render(
+        request, "base/video_post_confirm_delete.html", {"video_post": video_post}
+    )
+
+
+def like_video(request, pk):
+    video = get_object_or_404(VideoPost, pk=pk)
+    if request.method == "POST":
+        video.toggle_like(request.user)
+        return JsonResponse(
+            {
+                "likes_count": video.likes.count(),
+                "liked": request.user in video.likes.all(),
+            }
+        )
+    return JsonResponse({"error": "Invalid request"}, status=400)

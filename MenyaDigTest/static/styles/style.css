@@ -342,10 +342,13 @@ a {
 .header__menu {
   margin-left: auto;
   position: relative;
+  display: flex;
+  gap: 20px;
 }
 
 .header__menu a {
   display: flex;
+  flex-direction: row;
   gap: 1.5rem;
   align-items: center;
   font-weight: 500;
@@ -1162,4 +1165,166 @@ a {
   font-weight: 500;
   color: var(--color-main);
   font-weight: 1.4rem;
+}
+
+/*** video feed***/
+.videoFeedVideo {
+  border: 1px solid var(--color-dark-light);
+  border-radius: 8px;
+  margin-bottom: 16px;
+  background-color: var(--color-dark-light);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.videoFeedVideo__thumb {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.videoFeedVideo__header {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px;
+  border-bottom: 1px solid #5d5d5d;
+}
+
+.videoFeedVideo__author {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #333;
+}
+
+.videoFeedVideo__author .avatar {
+  margin-right: 8px;
+}
+
+.videoFeedVideo__actions {
+  font-size: 14px;
+  color: #666;
+}
+
+.videoFeedVideo__content {
+  padding: 16px;
+}
+
+.videoFeedVideo__description {
+  margin-top: 8px;
+  color: #333;
+}
+
+.videoFeedVideo__meta {
+  padding: 16px;
+  border-top: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.videoFeedVideo__likes {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #333;
+}
+
+.videoFeedVideo__likes svg {
+  margin-right: 8px;
+}
+
+.videoFeedVideo__topic {
+  font-size: 14px;
+  color: #666;
+}
+
+/** video content list***/
+.videoFeed {
+  margin-top: 20px;
+}
+
+.videoFeed__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid #ddd;
+}
+
+.videoFeed__header h2 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.videoFeed__header p {
+  margin: 0;
+  color: #666;
+}
+
+.videoFeed__list {
+  margin-top: 20px;
+}
+
+.videoFeedVideo {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  background: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.videoFeedVideo__header {
+  display: flex;
+  justify-content: space-between;
+  padding: 16px;
+  border-bottom: 1px solid #ddd;
+}
+
+.videoFeedVideo__author {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #333;
+}
+
+.videoFeedVideo__author .avatar {
+  margin-right: 8px;
+}
+
+.videoFeedVideo__actions {
+  font-size: 14px;
+  color: #666;
+}
+
+.videoFeedVideo__content {
+  padding: 16px;
+}
+
+.videoFeedVideo__description {
+  margin-top: 8px;
+  color: #3ebacd;
+}
+
+.videoFeedVideo__meta {
+  padding: 16px;
+  border-top: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.videoFeedVideo__likes {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #333;
+}
+
+.videoFeedVideo__likes svg {
+  margin-right: 8px;
+}
+
+.videoFeedVideo__topic {
+  font-size: 14px;
+  color: #666;
 }
