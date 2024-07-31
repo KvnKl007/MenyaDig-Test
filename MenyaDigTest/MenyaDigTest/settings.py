@@ -32,6 +32,7 @@ ALLOWED_HOSTS = [".vercel.app"]
 # Application definition
 
 INSTALLED_APPS = [
+    "whitenoise.runserver_nostatic",
     "menyaApp.apps.MenyaAppConfig",
     "django.contrib.admin",
     "django.contrib.auth",
@@ -47,6 +48,7 @@ AUTH_USER_MODEL = "menyaApp.User"
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
